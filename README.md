@@ -1,41 +1,28 @@
-# Nuxt 3 Minimal Starter
+# jdbd.nz
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This is the personal website of Josh Dean hosted at [jdbd.nz](https://jdbd.nz).
+
+It uses [Nuxt 3](https://nuxt.com/), [Nuxt Content](https://content.nuxt.com/) to manage blog posts, and is hosted on Cloudflare.
+I find CMS, and even headless CMS, always seem to get in my way. So this is a simple solution that provides me with the flexibility I need.
+
+If that vibes, [fork me](https://github.com/jdbdnz/jdbdnz/fork) and use this as a starting point for your own website.
 
 ## Setup
 
 Make sure to install the dependencies:
 
 ```bash
-# npm
-npm install
-
 # pnpm
 pnpm install
 
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+## Development
 
-Start the development server on `http://localhost:3000`:
+Run the development server on `http://localhost:3000`:
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
 pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
 ## Production
@@ -43,33 +30,15 @@ bun run dev
 Build the application for production:
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+# build & preview
+pnpm run preview
 ```
 
-Locally preview production build:
+At this point you should check out the local build to make sure everything is working as expected.
 
+If so, deploy:
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+pnpm run deploy
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
