@@ -7,9 +7,9 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "npm run build && wrangler pages dev",
+    "preview": "npm run build && wrangler pages dev dist/",
     "postinstall": "nuxt prepare",
-    "deploy": "npm run build && wrangler pages deploy",
+    "deploy": "npm run build && wrangler pages deploy dist/",
     "cf-typegen": "wrangler types",
     "lint": "eslint"
   },
