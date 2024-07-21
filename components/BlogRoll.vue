@@ -9,12 +9,5 @@
 </template>
 
 <script setup>
-const props = defineProps({
-  folder: {
-    type: String,
-    required: true
-  }
-})
-
-const posts = await queryContent(props.folder).sort({ date: -1 }).find()
+const posts = await queryContent().sort({ date: -1 }).find()
 </script>

@@ -11,9 +11,10 @@
       <p>Problems and solutions I'd like to remember</p>
     </header>
 
-    <BlogRoll folder="tech" />
+    <BlogRoll />
   </section>
 </template>
+
 <script setup lang="ts">
 import Biography from "~/components/CollapsibleBiography.vue";
 import SquigglyRule from "~/components/SquigglyRule.vue";
