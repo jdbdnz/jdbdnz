@@ -9,5 +9,9 @@
 </template>
 
 <script setup>
-const posts = await queryContent().sort({ date: -1 }).find()
+const posts = ref([])
+
+onMounted(async () => {
+  posts.value = await queryContent().sort({ date: -1 }).find()
+})
 </script>
