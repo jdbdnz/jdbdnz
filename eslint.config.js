@@ -28,6 +28,7 @@ export default [
         queryContent: 'readonly',
         useHead: 'readonly',
         ref: 'readonly',
+        onMounted: 'readonly',
       }
     }
   },
