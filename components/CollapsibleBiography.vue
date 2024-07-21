@@ -1,8 +1,8 @@
 <template>
-  <h1 class="mb-2">
+  <p class="mb-2">
     <span class="text-2xl">Hi, I'm Josh, </span>a product engineer who loves turning ideas into reality through design
     and engineering.
-  </h1>
+  </p>
   <button
     v-if="!expandedBio"
     class="text-red font-medium absolute"
