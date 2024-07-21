@@ -2,10 +2,11 @@
 
 This is the personal website of Josh Dean hosted at [jdbd.nz](https://jdbd.nz).
 
-It uses [Nuxt 3](https://nuxt.com/), [Nuxt Content](https://content.nuxt.com/) to manage blog posts, and is hosted on Cloudflare.
-I find CMS, and even headless CMS, always seem to get in my way. So this is a simple solution that provides me with the flexibility I need.
+It uses [Nuxt 3](https://nuxt.com/) and [Nuxt Content](https://content.nuxt.com/) for the website and blog, it is hosted on Cloudflare and using [Tailwind CSS](https://tailwindcss.com/) for styling.
 
-If that vibes, [fork me](https://github.com/jdbdnz/jdbdnz/fork) and use this as a starting point for your own website.
+I prefer the flexibility of a web app over the conveniences of traditional CMSs, so this setup allows me to easily adapt my site as needed.
+
+If this resonates with you, feel free to [fork it](https://github.com/jdbdnz/jdbdnz/fork) and use it as a starting point for your own website.
 
 ## Setup
 
