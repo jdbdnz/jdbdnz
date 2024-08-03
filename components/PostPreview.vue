@@ -2,20 +2,20 @@
   <NuxtLink
     v-if="post"
     :to="post._path"
-    class="py-6 sm:py-8 text-dark hover:text-blue focus:text-blue active:text-red"
+    class="py-4 text-dark hover:text-blue focus:text-blue active:text-red"
   >
     <article>
       <header>
+        <h3 class="text-xl mb-1">
+          {{ post.title }}
+        </h3>
         <time
           v-if="publishDate"
           :datetime="publishDate"
-          class="text-yellow text-sm"
+          class="text-sm"
         >
           {{ publishDateString }}
         </time>
-        <h2 class="text-2xl mb-1">
-          {{ post.title }}
-        </h2>
       </header>
       <p class="my-2">
         {{ post.description }}

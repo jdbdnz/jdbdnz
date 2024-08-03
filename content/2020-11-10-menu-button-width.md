@@ -2,6 +2,7 @@
 title: 'Controlling the width of an open menu button dropdown'
 description: 'Like every person, I want my menu button dropdowns to grow with their content, reach a maximum width, and then simply wrap. This should trivial. Alas, it is not trivial.'
 date: 2020-11-11
+category: Engineering, CSS, HTML, Web Development
 ---
 <article class="overflow-x-visible">
 <header>

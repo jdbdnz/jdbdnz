@@ -11,7 +11,19 @@
 <script setup>
 const posts = ref([])
 
+const props = defineProps({
+  category: {
+    type: [String, Array],
+    default: null,
+  }
+})
+
 onMounted(async () => {
-  posts.value = await queryContent().sort({ date: -1 }).find()
+  const scope = props.category ? { category: { $contains: props.category } } : {}
+
+  posts.value = await queryContent()
+      .sort({ date: -1 })
+      .where(scope)
+      .find()
 })
 </script>

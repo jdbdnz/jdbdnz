@@ -2,6 +2,7 @@
 title: 'Grouping with Vue.Draggable (or any sorting plugin)'
 description: 'Vue.Draggable is one of many excellent tools for sorting a list of items. However, after struggling to find a pluggable solution which also provides an adequate solution for grouping items, I devised my own solution which should work just as well for most sorting plugins.'
 date: 2020-11-21
+category: Engineering, JavaScript, Vue.js, Sortable, Web Development
 ---
 <article>
 <header>
