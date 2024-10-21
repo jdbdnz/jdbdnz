@@ -16,11 +16,28 @@
         <h1 class="text-2xl font-bold">Reviews</h1>
         <p class="mb-4">100 reviews from each</p>
       </div>
+      <div>
+        <ul class="flex items-center space-x-1">
+          <li v-for="tagName in tagOptions">
+            <button
+              class="rounded px-1.5 py-1 flex items-center space-x-1 border-2 w-full hover:bg-gray-100"
+              :class="{
+                'border-blue-300': tagFilter === tagName,
+                'border-gray-200': tagFilter !== tagName,
+              }"
+              @click="filterTag(tagName)"
+            >
+              <span class="w-3 h-3 flex" :class="colorForTag(tagName)"></span>
+              <span>{{ tagName }}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
       <div class="flex flex-col">
         <span class="text-sm font-bold">
           Search Reviews
         </span>
-        <input type="text" v-model="searchQuery" placeholder="Sapphic" class="mb-4 p-2 border border-gray-300 rounded" />
+        <input :disabled="!!tagFilter" type="text" v-model="searchQuery" placeholder="Sapphic" class="mb-4 p-2 border border-gray-300 rounded" />
       </div>
     </div>
     <table class="table-auto border-collapse border border-gray-400 w-full" @mouseup="handleSelection">
@@ -63,8 +80,9 @@
             </button>
           </th>
           <th class="border border-gray-300 px-4 py-2 align-top hover:bg-gray-300">
-            <button class="w-full flex space-x-1.5" @click="sortBy('review')">
+            <button class="w-full flex space-x-1.5 items-baseline" @click="sortBy('review')">
               <span>Review</span>
+              <span class="text-gray-500 text-sm" v-if="tagFilter">(Filter: "{{tagFilter}}")</span>
               <template v-if="currentSort === 'review'">
                 <span v-if="currentSortDir === 'asc'">▲</span>
                 <span v-else>▼</span>
@@ -89,24 +107,39 @@
     </table>
     <ul
       v-if="taggingReviewId"
-      class="rounded bg-gray-100 border border-gray-200 divide-y divide-gray-200"
+      class="rounded border border-gray-300 space-y-px bg-gray-300 overflow-hidden"
       :style="{
         position: 'absolute',
         top: selectionPosition.top + 5 + 'px',
         left: selectionPosition.left + 'px'
       }"
     >
-        <li v-for="tagName in tagOptions" >
-          <button class="px-2 py-1.5 flex items-center space-x-1" @click="handleTag(tagName)">
+        <li v-for="tagName in tagOptions" class="overflow-hidden">
+          <button class="px-2 py-1.5 flex items-center space-x-1 w-full bg-gray-200 hover:bg-gray-100" @click="handleTag(tagName)">
             <span class="w-3 h-3 flex" :class="colorForTag(tagName)"></span>
             <span>{{ tagName }}</span>
           </button>
         </li>
         <li>
-          <button class="px-2 py-1.5"  @click="handleTag(ADD_TAG)">
+          <button class="px-2 py-1.5 bg-gray-200 w-full hover:bg-gray-100"  @click="handleTag(ADD_TAG)">
             + Add New Tag
           </button>
         </li>
+    </ul>
+    <ul
+      v-if="editTagging"
+      class="rounded bg-gray-100 border border-gray-300 space-y-px bg-gray-300 overflow-hidden"
+      :style="{
+        position: 'absolute',
+        top: selectionPosition.top + 5 + 'px',
+        left: selectionPosition.left + 'px'
+      }"
+    >
+      <li>
+        <button class="px-2 py-1.5 text-sm bg-gray-200 hover:bg-gray-100"  @click="handleRemoveTagging">
+          Remove Highlight
+        </button>
+      </li>
     </ul>
   </div>
 
@@ -125,6 +158,19 @@
       "bg-orange-200",
       "bg-cyan-200"
     ]
+
+    function makeHighlightClickHandler(event, tagName, reviewId, tagIdx) {
+      event.stopPropagation();
+      window.dispatchEvent(new CustomEvent('highlight-click', {
+        detail: {
+          target: event.target,
+          tagName: tagName,
+          reviewId: reviewId,
+          tagIdx: tagIdx
+        }
+      }));
+    }
+
     window.onload = () => {
       new Vue({
         el: '#app',
@@ -148,11 +194,15 @@
 
           tags: [],
           ADD_TAG,
+
+          editTagging: null,
+          tagFilter: null,
         },
         mounted() {
           this.fuse = new Fuse(this.reviews, this.options)
           this.hydrateTags()
           window.addEventListener('keydown', this.handleKeydown)
+          window.addEventListener('highlight-click', this.handleHighlightClick)
         },
         beforeDestroy() {
           window.removeEventListener('keydown', this.handleKeydown)
@@ -168,7 +218,12 @@
         computed: {
           filteredReviews() {
             if (this.searchQuery.trim() === '') {
-              return this.reviews
+              const taggingReviewIds = new Set(_.keys(this.tags?.[this.tagFilter]))
+              if (taggingReviewIds.size) {
+                return _.filter(this.reviews, r => taggingReviewIds.has(r.id))
+              } else {
+                return this.reviews
+              }
             }
             return this.fuse.search(this.searchQuery).map(result => result.item)
           },
@@ -200,6 +255,7 @@
           handleSelection() {
             const selection = window.getSelection()
             if (selection.toString().length > 5) {
+              this.editTagging = null
               const range = selection.getRangeAt(0)
 
 
@@ -218,7 +274,6 @@
             }
           },
           handleTag(tag) {
-            console.log(tag)
             if (tag === ADD_TAG) {
               tag = prompt('Label for your new tag?')
             }
@@ -233,11 +288,17 @@
               // Ensure tag is initialized
               tagsCopy[tag] = tagsCopy[tag] || {}
 
+              // Clone the contents of the current range
+              const clonedContents = this.currentRange.cloneContents();
+              const div = document.createElement('div');
+              div.appendChild(clonedContents);
+
               // Add new tagging
               const newTagging = {
-                text: this.selectedText,
+                text: div.textContent, // Store text content
+                html: div.innerHTML, // Store HTML content
                 range: this.currentRange,
-              }
+              };
               tagsCopy[tag][this.taggingReviewId] = [
                 // Ensure review is initialized
                 ...(tagsCopy[tag][this.taggingReviewId] || []),
@@ -258,7 +319,6 @@
             this.tags = JSON.parse(tagsJSON)
           },
           dehydrateTags(newTags, oldTags) {
-            console.log({newTags, oldTags})
             if (!newTags || !oldTags) return // hydrating
 
             const tagsJSON = JSON.stringify(newTags)
@@ -289,15 +349,46 @@
             _.each(this.tags, (tag, tagName) => {
               const color = this.colorForTag(tagName)
               const taggings = tag[review.id] || []
-              taggings.forEach(tagging => {
-                const escapedText = this.escapeRegExp(tagging.text);
+              taggings.forEach((tagging, tagIdx) => {
+                const escapedText = this.escapeRegExp(tagging.html || tagging.text);
                 const regex = new RegExp(`(${escapedText})`, 'gi');
-                text = text.replace(regex, `<span class="${color}">$1</span>`);
+                text = text.replace(regex, `<span onclick="makeHighlightClickHandler(event, '${tagName}', '${review.id}', '${tagIdx}')" class="${color}">$1</span>`);
               })
             });
 
             return text
           },
+
+          handleHighlightClick(event) {
+            const { target, ...editTagging} = event.detail || {}
+            if (target) {
+              this.taggingReviewId = null
+              this.editTagging = editTagging
+              const rect = target.getBoundingClientRect()
+              this.selectionPosition = { top: rect.bottom + window.scrollY, left: rect.left + window.scrollX }
+            }
+          },
+
+          handleRemoveTagging() {
+            if (!this.editTagging) {
+              return console.error('No tagging being edited')
+            } else {
+              const { tagName, reviewId, tagIdx } = this.editTagging
+              const copy = _.cloneDeep(this.tags);
+              _.pullAt(copy[tagName][reviewId], tagIdx);
+              this.tags = copy
+              this.editTagging = null
+            }
+          },
+
+          filterTag(newTagFilter) {
+            // Toggle
+            if (this.tagFilter === newTagFilter) {
+              this.tagFilter = null
+            } else {
+              this.tagFilter = newTagFilter
+            }
+          }
         }
       })
     }
