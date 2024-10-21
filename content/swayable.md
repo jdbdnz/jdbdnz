@@ -17,6 +17,6 @@ Swayable grew and scaled, adapting to a broader mission of measuring the persuas
 
 From 2019-2024 I led product engineering, laying the foundations for all of Web apps and APIs, including a survey tool which has conducted millions of interviews, and a data exploration and visualization suite allowing customers to dynamically explore the results of thousands of ad experiments and gain key insights about their audiences.
 
-I grew to manage a team of five full-stack engineers under me, discovering natural skills in mentorship, and a great deal of satisfaction in helping grow engineers' skills and careers.
+I grew to manage a team of five full-stack engineers, discovering natural skills in mentorship, and a great deal of satisfaction in helping grow the skills and careers of other engineers.
 
 I reported directly to Swayable's [CTO Valerie Coffman](https://www.linkedin.com/in/valeriecoffman/) from whom I learned a great deal about data science and distributed computing, and worked closely with the outstanding [Product Designer Iri Hoxha](https://www.linkedin.com/in/irihoxha/).
