@@ -376,6 +376,12 @@
               const { tagName, reviewId, tagIdx } = this.editTagging
               const copy = _.cloneDeep(this.tags);
               _.pullAt(copy[tagName][reviewId], tagIdx);
+              if (copy[tagName][reviewId].length === 0) {
+                delete copy[tagName][reviewId]
+              }
+              if (Object.keys(copy[tagName]).length === 0) {
+                delete copy[tagName]
+              }
               this.tags = copy
               this.editTagging = null
             }
