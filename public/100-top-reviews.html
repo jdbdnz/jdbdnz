@@ -111,6 +111,7 @@
   </div>
 
   <script>
+    const DEBUG = "Who knew a fantasy that combines political scheming, colonialism, war, and a queer accountant who uses financial policies to achieve her aims would be so compelling? The author is brilliant."
     const ADD_TAG = "add_tag"
     const COLORS = [
       "bg-red-200",
@@ -275,6 +276,10 @@
             return COLORS[i % COLORS.length]
           },
 
+          escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+          },
+
           highlightTaggings(field, review) {
             let text = review[field]
 
@@ -285,10 +290,12 @@
               const color = this.colorForTag(tagName)
               const taggings = tag[review.id] || []
               taggings.forEach(tagging => {
-                const regex = new RegExp(`(${tagging.text})`, 'gi');
+                const escapedText = this.escapeRegExp(tagging.text);
+                const regex = new RegExp(`(${escapedText})`, 'gi');
                 text = text.replace(regex, `<span class="${color}">$1</span>`);
               })
             });
+
             return text
           },
         }
